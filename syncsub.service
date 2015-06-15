@@ -2,10 +2,10 @@
 Description=Subs daemon
 
 [Service]
-User=pruebas
+User=<ANY USER YOU WANT>
 Environment="PYTHONPATH=."
 ExecStart=/usr/bin/python run.py
-WorkingDirectory=/home/len/ual/subs
+WorkingDirectory=<DIR TO SYNCSUB>
 
 [Install]
 WantedBy=multi-user.target
