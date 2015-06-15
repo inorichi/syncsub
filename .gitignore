@@ -1,0 +1,11 @@
+.venv
+db.sqlite3
+secret.key
+__pycache__
+fixtures
+assets
+*.sw[op]
+*.py[oc]
+
+*.mkv
+*.mp4

@@ -1,0 +1,24 @@
+<div class="ngdialog-content">
+    <div class="ngdialog-message">
+        <h3>Users permissions</h3>
+        </br>
+        <p style="font-size: 0.9em !important;">
+            Note: Users in a group that already has this permission won't appear here
+        </p>
+        </br>
+        <dual-select 
+            left-items="availableUsers"
+            right-items="users"
+            left-title="Available users"
+            right-title="Current users"
+            height="300px"
+            width="342px">
+        </dual-select>
+    </div>
+    <div class="ngdialog-buttons mt">
+        <button class="ngdialog-button ngdialog-button-secondary"
+            ng-click="closeThisDialog()">Cancel</button>
+        <button class="ngdialog-button ngdialog-button-primary" 
+            ng-click="save() && confirm()">Confirm</button>
+    </div>
+</div>

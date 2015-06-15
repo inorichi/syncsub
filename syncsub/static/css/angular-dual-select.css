@@ -1,0 +1,43 @@
+.dualSelect {
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.dualSelect .select {
+    margin-right: 20px;
+    float: left;
+    height: inherit;
+    display: table;
+}
+.dualSelect .select * {
+    width: inherit;
+}
+.dualSelect .selectHeader {
+    display: table-row;
+}
+.dualSelect .selectBody {
+    display: table-row;
+    height: 100%;
+}
+.dualSelect .select select {
+    height: 100%;
+}
+.dualSelect .buttons {
+    margin-top:15px;
+    height: 35px;
+    display: table;
+}
+.dualSelect .btn {
+    height: inherit;
+    display: table-row;
+}
+.dualSelect .title {
+    font-weight: bold;
+    margin-bottom:15px;
+}
+.dualSelect .btn.all {
+    width: 30%;
+}
+.dualSelect .btn.sel {
+    width: 70%;
+}
+

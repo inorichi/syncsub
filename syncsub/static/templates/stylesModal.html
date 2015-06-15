@@ -1,0 +1,119 @@
+<div class="modal-header">
+<h4 class="modal-title">Editor de estilos</h4>
+</div>
+<div class="modal-body">
+    <div class="container-fluid">
+        <div class="col-md-3">
+            <li ng-repeat="style in styles" class="style">
+                <a ng-click="changeStyle(style)" ng-class="{selected: style.name == savedState.name}">{{ style.name }}</a>
+            </li>
+        </div>
+        <div class="col-md-9" ng-show="selected.item">
+            <form name="form">
+                <div class="form-group">
+                    Nombre: <input type="text" class="form-control input-sm" ng-model="selected.item.name">
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-9">
+                            Fuente: <input type="text" class="form-control input-sm" ng-model="selected.item.font">
+                        </div>
+                        <div class="col-xs-3">
+                            Tamaño: <input type="text" class="form-control input-sm" ng-model="selected.item.size">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 4px">
+                        <div class="col-xs-9 form-inline">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" ng-model="selected.item.bold" ng-true-value=1 ng-false-value=0> Negrita
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" ng-model="selected.item.italic" ng-true-value=1 ng-false-value=0> Cursiva
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" ng-model="selected.item.underline" ng-true-value=1 ng-false-value=0> Subrayado
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" ng-model="selected.item.strike_out" ng-true-value=1 ng-false-value=0> Tachado
+                            </label>
+                        </div>
+                        <div class="col-xs-3">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" ng-model="selected.item.border_style">Caja opaca
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-3">
+                        Primario: <input type="text" class="form-control input-sm" ng-model="selected.item.primary_color">
+                    </div>
+                    <div class="col-xs-3">
+                        Secundario: <input type="text" class="form-control input-sm" ng-model="selected.item.secondary_color">
+                    </div>
+                    <div class="col-xs-3">
+                        Contorno: <input type="text" class="form-control input-sm" ng-model="selected.item.outline_color">
+                    </div>
+                    <div class="col-xs-3">
+                        Sombra: <input type="text" class="form-control input-sm" ng-model="selected.item.back_color">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-3">
+                        Contorno: <input type="text" class="form-control input-sm" ng-model="selected.item.outline">
+                    </div>
+                    <div class="col-xs-3">
+                        Sombra: <input type="text" class="form-control input-sm" ng-model="selected.item.shadow">
+                    </div>
+                    <div class="col-xs-6">
+                        Codificación:
+                        <select
+                            class="form-control input-sm"
+                            ng-model="selected.item.encoding"
+                            ng-options="encoding.value as encoding.label for encoding in encodings">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-xs-3">
+                        Izquierda: <input type="text" class="form-control input-sm" ng-model="selected.item.margin_left">
+                    </div>
+                    <div class="col-xs-3">
+                        Derecha: <input type="text" class="form-control input-sm" ng-model="selected.item.margin_right">
+                    </div>
+                    <div class="col-xs-3">
+                        Centro: <input type="text" class="form-control input-sm" ng-model="selected.item.margin_vertical">
+                    </div>
+                    <div class="col-xs-3">
+                        Alineación: <input type="text" class="form-control input-sm" ng-model="selected.item.alignment">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-3">
+                        Escala X: <input type="text" class="form-control input-sm" ng-model="selected.item.scale_x">
+                    </div>
+                    <div class="col-xs-3">
+                        Escala Y: <input type="text" class="form-control input-sm" ng-model="selected.item.scale_y">
+                    </div>
+                    <div class="col-xs-3">
+                        Espaciado: <input type="text" class="form-control input-sm" ng-model="selected.item.spacing">
+                    </div>
+                    <div class="col-xs-3">
+                        Rotación: <input type="text" class="form-control input-sm" ng-model="selected.item.angle">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary" ng-disabled="form.$pristine" ng-click="save(form)">Guardar</button>
+                    <button class="btn btn-warning" ng-disabled="form.$pristine" ng-click="reset(form);">Reiniciar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,49 @@
+<div class="dualSelect" style="height: {{ setHeight(height) }}">
+    <div class="select" style="width: {{ setWidth(leftWidth) }}">
+        <div class="selectHeader">
+            <span class="title" ng-if="leftTitle">{{ leftTitle }}</span>
+            <input type="text" class="filter" 
+                ng-model="leftQuery" placeholder="Filter..."/>
+            
+            <div class="buttons">
+                <button class="btn all left" ng-click="moveAllRight()" title="Move all to right"
+                                ng-disabled="!leftItems.length">
+                    ▶▶
+                </button>
+                <button class="btn sel left" ng-click="moveRight()" title="Move right"
+                                ng-disabled="!selected.left.length">
+                    ▶
+                </button>
+            </div>
+        </div>
+        <div class="selectBody">
+            <select ng-options="{{ renderItem(leftDisplay) }} for item in leftItems | filter:leftQuery" 
+                    ng-model="selected.left"
+                    multiple>
+            </select>
+        </div>
+    </div>
+    <div class="select" style="width: {{ setWidth(rightWidth) }}">
+        <div class="selectHeader">
+            <span class="title" ng-if="rightTitle">{{ rightTitle }}</span>
+            <input type="text" class="filter" style="width: {{ setWidth(rightWidth) }}"
+                ng-model="rightQuery" placeholder="Filter..."/>
+            <div class="buttons">
+                <button class="btn sel right" ng-click="moveLeft()" title="Move left" 
+                                ng-disabled="!selected.right.length">
+                    ◀
+                </button>
+                <button class="btn all right" ng-click="moveAllLeft()" title="Move all to left" 
+                                ng-disabled="!rightItems.length">
+                    ◀◀
+                </button>
+            </div>
+        </div>
+        <div class="selectBody">
+            <select ng-options="{{ renderItem(rightDisplay) }} for item in rightItems | filter:rightQuery" 
+                    ng-model="selected.right" 
+                    multiple>
+            </select>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block css %}
+{# <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/> #}
+<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/ngDialog.css' %}">
+<link rel="stylesheet" href="{% static 'css/ngDialog-theme-plain.css' %}">
+<link rel="stylesheet" href="{% static 'css/angular-dual-select.css' %}">
+<link rel="stylesheet" href="{% static 'css/explorer.css' %}"/>
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/angular.js' %}"></script>
+<script src="{% static 'js/lodash.js' %}"></script>
+<script src="{% static 'js/angular-cookies.js' %}"></script>
+<script src="{% static 'js/restangular.js' %}"></script>
+<script src="{% static 'js/ngDialog.js' %}"></script>
+<script src="{% static 'js/angular-dual-select.js' %}"></script>
+<script src="{% static 'js/explorer.js' %}"></script>
+
+
+<script>
+angular.module('explorer').value('currentFolder', {{ item.id }})
+</script>
+{% endblock %}
+
+{% block body %}
+<body ng-app="explorer">
+
+<script type="text/ng-template" id="template/dualSelect.html">
+    <div ng-include src="'{% static 'templates/dual-select-template.html' %}'"></div>
+</script>
+
+<div id="content">
+    <b>
+        <a href="{% url 'item-view' slug='' %}">/</a>
+
+        {% for folder in item.get_path %}
+            {% if not forloop.last %}
+                <a class="link" href="{% url 'item-view' folder.1 %}">{{ folder.0 }}</a> / 
+            {% else %}
+                {{ folder.0 }}
+            {% endif %}
+        {% endfor %}
+    </b>
+    <div id="management" ng-controller="managementCtrl">
+        {% if can_create_folder %}
+        <script type="text/ng-template" id="newFolderTemplate">
+            <div ng-include src="'{% static 'templates/new-folder-dialog.html' %}'"></div>
+        </script>
+        <button class="option" ng-click="newFolder()">
+            <i class="fa fa-folder-plus"></i> New folder
+        </button>
+        {% endif %}
+        {% if can_create_file %}
+        <script type="text/ng-template" id="newFileTemplate">
+            <div ng-include src="'{% static 'templates/new-file-dialog.html' %}'"></div>
+        </script>
+        <button class="option" ng-click="newFile()">
+            <i class="fa fa-file-plus"></i> New file
+        </button>
+        {% endif %}
+        {% if user.is_staff %}
+        <script type="text/ng-template" id="userPermTemplate">
+            <div ng-include src="'{% static 'templates/user-perm-dialog.html' %}'"></div>
+        </script>
+        <script type="text/ng-template" id="groupPermTemplate">
+            <div ng-include src="'{% static 'templates/group-perm-dialog.html' %}'"></div>
+        </script>
+        <button class="option" ng-click="openUserPerms()">
+            <i class="fa fa-user-plus"></i> Add users
+        </button>
+        <button class="option" ng-click="openGroupPerms()">
+            <i class="fa fa-group-plus"></i> Add groups
+        </button>
+
+        {% endif %}
+    </div>
+    <div id="items" ng-controller="itemCtrl">
+        <table>
+        {% if not item.is_root_folder %}
+            <tr ng-click="go('{% url 'item-view' slug=item.parent.path %}')">
+                <td class="icon"><i class="fa fa-reply fa-lg"></i></td>
+                <td>..</td>
+            </tr>
+        {% endif %}
+        {% for folder in folders %}
+            <tr ng-click="go('{% url 'item-view' folder.path %}')">
+                <td class="icon"><i class="fa fa-folder fa-lg"></i></td>
+                <td>{{ folder.name }}</td>
+            </tr>
+        {% endfor %}
+        {% for file in files %}
+            <tr ng-click="go('{% url 'item-view' file.path %}')">
+                <td class="icon"><i class="fa fa-file fa-lg"></i></td>
+                <td>{{ file.name }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+</div>
+</body>
+{% endblock %}

@@ -1,0 +1,15 @@
+<div class="ngdialog-content">
+    <div class="ngdialog-message">
+        <h3>New file</h3>
+        </br>
+        <p style="font-size:0.9em;">Enter file name:</p>
+        <input type="text" ng-model="file.name" value></input>
+        <p style="color: #f00; font-size:0.9em" ng-if="error">{{ error }}</p>
+    </div>
+    <div class="ngdialog-buttons mt">
+        <button class="ngdialog-button ngdialog-button-secondary"
+            ng-click="closeThisDialog()">Cancel</button>
+        <button class="ngdialog-button ngdialog-button-primary" 
+            ng-click="save()">Confirm</button>
+    </div>
+</div>

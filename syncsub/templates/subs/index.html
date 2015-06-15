@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block css %}
+    {# third-party dependencies #}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/fixed-header.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/AdminLTE.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/skins/skin-blue.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/jquery.dataTables.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/ngDialog.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/ngDialog-theme-plain.css' %}">
+
+    {# syncsub #}
+    <link rel="stylesheet" href="{% static 'css/subs.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/libjass.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}" id="font-map" />
+{% endblock %}
+
+{% block js %}
+    {# third-party dependencies #}
+    {% comment %}
+    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% endcomment %}
+
+    <script src="{% static 'js/common.min.js' %}"></script>
+
+    {# adminlte #}
+    <script src="{% static 'js/app.min.js' %}"></script>
+
+    {# syncsub #}
+    <script src="{% static 'js/libjass.js' %}"></script>
+    <script src="{% static 'js/subs.js' %}"></script>
+
+    <script>
+        angular.module('subs').value('SocketConfig', {
+            'room': {{ file.id }}
+        });
+    </script>
+    <script>
+        $(function() {   
+            $('#table_lines').DataTable({
+                paging: false,
+                info: false,
+                searching: false,
+                ordering: false,
+                scrollY: '300px',
+            });
+        })
+    </script>
+{% endblock %}
+
+{% block body %}
+{% verbatim %}
+<!--
+
+<div id="topbar" ng-controller="SidebarCtrl">
+    <button class="btn btn-default" ng-click="openModal()">Edit styles</button>
+    <button class="btn btn-default" ng-click="openVideo()">Open video</button>
+    <button class="btn btn-default" ng-click="closeVideo()">Close video</button>
+    <div class="fileUpload btn btn-default">
+        <span>Import ASS</span>
+        <input type="file" class="upload" on-file="importFile" />
+    </div>
+    <button class="btn btn-default" ng-click="saveFile()">Save ASS</button>
+</div>
+
+-->
+<body class="skin-blue sidebar-mini sidebar-collapse" ng-app="subs">
+  <div class="wrapper">
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+
+      <!-- sidebar: style can be found in sidebar.less -->
+      <section class="sidebar">
+
+        <!-- Sidebar Menu -->
+        <ul class="sidebar-menu" ng-controller="SidebarCtrl">
+            <li class="header">SyncSub</li>
+          <li class="treeview" ng-show="!isVideoOpen">
+          <a href="#"><i class='fa fa-play-circle'></i> <span>Open video</span> <i class="fa fa-angle-left pull-right"></i></a>
+            <ul class="treeview-menu">
+              <li><a href="#" open-file callback="openVideoFromFile" accept="video/*">From file</a></li>
+              <li><a href="#" ng-click="openVideoFromUrl()">From URL</a></li>
+            </ul>
+          </li>
+          <li><a href="#" ng-click="closeVideo()" ng-show="isVideoOpen"><i class='fa fa-eject'></i> <span>Close video</span></a></li>
+          <li><a href="#" ng-click="editStyles()"><i class='fa fa-font'></i> <span>Edit styles</span></a></li>
+          <li class="treeview">
+            <a href="#"><i class='fa fa-floppy-o'></i> <span>Save subtitle</span> <i class="fa fa-angle-left pull-right"></i></a>
+            <ul class="treeview-menu">
+              <li><a href="#" ng-click="saveFile()">As ASS</a></li>
+              <li><a href="#">As SRT</a></li>
+            </ul>
+          </li>
+          <li class="treeview">
+            <a href="#"><i class='fa fa-clipboard'></i> <span>Import subtitle</span> <i class="fa fa-angle-left pull-right"></i></a>
+            <ul class="treeview-menu">
+              <li><a href="#" open-file callback="importFile">From ASS</a></li>
+              <li><a href="#">From SRT</a></li>
+            </ul>
+          </li>
+        </ul><!-- /.sidebar-menu -->
+      </section>
+      <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6" ng-controller="VideoCtrl">
+                    <video id="video" ng-src="{{ videoUrl }}" ng-if="isVideoOpen" controls muted></video>
+                </div>
+                <div class="col-md-6" id="editor" ng-controller="EditorCtrl">
+                  <form class="form-inline">
+                    <div class="checkbox">
+                      <label>
+                        <input id="comment-editor" comment-box type="checkbox" ng-disabled="!hasSelection()"> Comentar
+                      </label>
+                    </div>
+                    <select
+                        class="form-control"
+                        id="style-editor"
+                        ng-model="selectedStyle"
+                        ng-options="style.name for style in styles track by style.name"
+                        ng-disabled="!hasSelection()"
+                        select-style>
+                    </select>
+                    <div class="form-group">
+                      <input class="form-control" id="start-editor" time-input="start" type="text" ng-disabled="!hasSelection()"></input>
+                    </div>
+                    <div class="form-group">
+                      <input class="form-control" id="end-editor" time-input="end" type="text" ng-disabled="!hasSelection()"></input>
+                    </div>
+                  </form>
+                  <textarea class="form-control" id="text-editor" ng-disabled="!hasSelection()" ng-text rows=3></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div ng-controller="LineCtrl">
+                    <table id="table_lines" class="table row-border hover cell-border">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Inicio</th>
+                                <th>Fin</th>
+                                <th>Estilo</th>
+                                <th style="width: 100%">Texto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="line in lines"
+                                ng-line
+                                ng-class="{warning: line.comment == 1, active: line == selected.line}"
+                                ng-context-menu="menuOptions">
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ line.start }}</td>
+                                <td>{{ line.end }}</td>
+                                <td>{{ line.style }}</td>
+                                <td>{{ line.txt }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+      </section><!-- /.content -->
+    </div><!-- /.content-wrapper -->
+
+  </div><!-- ./wrapper -->
+
+
+{% endverbatim %}
+{% endblock %}

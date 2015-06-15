@@ -1,0 +1,11 @@
+[Unit]
+Description=Subs daemon
+
+[Service]
+User=pruebas
+Environment="PYTHONPATH=."
+ExecStart=/usr/bin/python run.py
+WorkingDirectory=/home/len/ual/subs
+
+[Install]
+WantedBy=multi-user.target

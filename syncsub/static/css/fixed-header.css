@@ -1,0 +1,53 @@
+.fixed-table-container {
+    position: relative;
+}
+
+.fixed-table-container-inner {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+}
+
+div.fixed-table-container div table thead tr th {
+    padding: 0;
+    border: 0;
+}
+
+.th-inner {
+    position: absolute;
+    top: 0;
+    text-align: left;
+}
+
+.hidden-header .th-inner {
+    position: static;
+    overflow-y: hidden;
+    height: 0;
+}
+
+
+div.my-table div.fixed-table-container-inner {
+    /* the maximum height of the table: */
+    max-height: 150px;
+
+    width: 100%;
+
+    margin-bottom: 40px;
+}
+
+div.my-table div.th-inner {
+    /* the height of the header row */
+    line-height: 30px;
+    border-left: 1px solid #ddd;
+    padding-left: 5px;
+}
+
+div.my-table div.fixed-table-container {
+    /* the height of the header row - this needs to match line-height above */
+   padding-top: 30px;
+   border-top: 1px solid #ddd;
+}
+
+div.my-table tr.hidden-header .th-inner {
+  padding-right: 5px;
+}

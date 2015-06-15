@@ -1,0 +1,20 @@
+<div class="ngdialog-content">
+    <div class="ngdialog-message">
+        <h3>Group permissions</h3>
+        </br>
+        <dual-select 
+            left-items="availableGroups"
+            right-items="groups"
+            left-title="Available groups"
+            right-title="Current groups"
+            height="300px"
+            width="342px">
+        </dual-select>
+    </div>
+    <div class="ngdialog-buttons mt">
+        <button class="ngdialog-button ngdialog-button-secondary"
+            ng-click="closeThisDialog()">Cancel</button>
+        <button class="ngdialog-button ngdialog-button-primary" 
+            ng-click="save() && confirm()">Confirm</button>
+    </div>
+</div>
