@@ -3,6 +3,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import json
+from .room import RoomManager
+
+
+room_manager = RoomManager.instance()
+
 
 class Client(object):
     def __init__(self, req_handler, room):
@@ -25,5 +30,5 @@ class Client(object):
             self.locked_line['locked'] = 0
 
         self.room.del_client(self)
-
-
+        if not self.room.has_clients:
+            room_manager.delete(self.room.name)

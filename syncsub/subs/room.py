@@ -29,6 +29,7 @@ class Room(object):
     def del_client(self, client):
         self.clients.remove(client)
 
+    @property
     def has_clients(self):
         return len(self.clients) > 0
 
@@ -191,6 +192,8 @@ class RoomManager(object):
         return room
 
     def delete(self, name):
+        app_log.debug("Deleting room: %s" % name)
+        self.rooms[name].save()
         del self.rooms[name]
 
     def all(self):

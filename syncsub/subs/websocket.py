@@ -3,7 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from tornado.websocket import WebSocketHandler
-from tornado.log import gen_log
+from tornado.log import app_log
 
 from .messages import MessageHandler 
 from .client import Client
@@ -34,10 +34,7 @@ class SubsWebSocketHandler(WebSocketHandler):
         message_handler.process_message(self.client, msg)
 
     def on_close(self):
-        try:
-            self.client.close()
-        except:
-            pass
+        self.client.close()
 
     def check_origin(self, origin):
         return True
