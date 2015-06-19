@@ -19,8 +19,8 @@ class BaseHandler(object):
         method = getattr(self, action, None)
         if method is not None:
             req = Request(client, msg)
-            if method(req) and not client.room.changed:
-                client.room.changed = True
+            if method(req) and not client.room.modified:
+                client.room.modified = True
 
         else:
             gen_log.warning('Message for non existing method from client %s: %s'

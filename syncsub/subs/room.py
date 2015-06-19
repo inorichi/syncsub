@@ -18,7 +18,7 @@ class Room(object):
         self.clients = set()
         self.next_id = max(self.subs.keys()) if self.subs else 0
         self.subs_path = join(subtitles_dir, self.name + '.txt')
-        self.changed = False
+        self.modified = False
 
         if not self.subs:
             self.add_line(self.create_line())
@@ -86,17 +86,17 @@ class Room(object):
         self.next_id = max(self.subs_order)
 
     def save(self):
-        if not self.changed:
+        if not self.modified:
             return
 
-        app_log.debug("Room %s changed, saving changes" % self.name)
+        app_log.debug("Room %s modified, saving changes" % self.name)
 
         with open(self.subs_path, 'w') as f:
             f.write(json.dumps({'styles': self.styles}))
             f.write('\n')
             f.write(json.dumps({'lines': [self.subs[x] for x in self.subs_order]}))
 
-        self.changed = False
+        self.modified = False
 
     def create_style(self, name, content={}):
     # Styles: dict(name -> style)
