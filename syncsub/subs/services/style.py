@@ -5,6 +5,7 @@
 from tornado.log import gen_log
 
 from .base import BaseHandler, Request
+from ..utils import create_style
 
 
 def get_style_or_error(func):
@@ -28,7 +29,7 @@ class StyleHandler(BaseHandler):
             gen_log.info('Style %s already exists' % req.content['name'])
             return
 
-        style = req.client.room.create_style(req.content['name'])
+        style = create_style(req.content['name'])
         req.client.styles.append(style)
         req.content['style'] = style
 
@@ -75,11 +76,11 @@ class StyleHandler(BaseHandler):
 
     def init(self, req):
         if not req.client.styles:
-            style = req.client.room.create_style('Default')
+            style = create_style('Default')
             req.client.styles.append(style)
 
             # FIXME temporary style
-            another_style = req.client.room.create_style('Test')
+            another_style = create_style('Test')
             req.client.styles.append(another_style)
 
         req.reply(req.client.styles)

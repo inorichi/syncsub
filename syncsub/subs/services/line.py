@@ -5,6 +5,7 @@
 from tornado.log import gen_log, app_log
 
 from .base import BaseHandler, Request
+from ..utils import create_line
 
 
 def get_selected_line(func):
@@ -36,7 +37,7 @@ class LineHandler(BaseHandler):
 
     @get_line_by_id
     def add(self, req, line):
-        new_line = req.client.room.create_line({
+        new_line = create_line(req.client.room.get_next_id, {
             'start': line.get('start', '0:00:00.00'),
             'end': line.get('end', '0:00:02.00'),
             'style': line.get('style', 'Default'),
