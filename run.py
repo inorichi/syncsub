@@ -13,10 +13,9 @@ import tornado.wsgi
 from tornado.options import options, parse_command_line
 from tornado.log import app_log
 
-
 from settings import settings, save_time
 from wsgi import application as django_app
-from syncsub.subs.subs import SubsWebSocketHandler, room_manager
+from syncsub.subs.websocket import SubsWebSocketHandler, room_manager
 
 
 def main():
