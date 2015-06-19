@@ -4,6 +4,7 @@ secret.key
 __pycache__
 fixtures
 assets
+data/*
 *.sw[op]
 *.py[oc]
 
