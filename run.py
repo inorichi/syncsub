@@ -19,6 +19,8 @@ from syncsub.subs.websocket import SubsWebSocketHandler, room_manager
 
 
 def main():
+    parse_command_line()
+
     handlers = [
         (r'/ws', SubsWebSocketHandler),
         (r'.*', tornado.web.FallbackHandler, {
@@ -46,6 +48,5 @@ def main():
 
 
 if __name__ == "__main__":
-    parse_command_line()
     main()
 
