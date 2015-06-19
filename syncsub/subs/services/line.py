@@ -54,6 +54,7 @@ class LineHandler(BaseHandler):
 
         msg['line'] = new_line
         req.send_to_all(msg)
+        return True
 
     @get_selected_line
     def update(self, req, line):
@@ -61,6 +62,7 @@ class LineHandler(BaseHandler):
         req.content['id'] = line['id']
 
         req.reply_and_send_to_partners(req.content)
+        return True
 
     @get_line_by_id
     def delete(self, req, line):
@@ -79,6 +81,8 @@ class LineHandler(BaseHandler):
                 'action': 'add',
                 'content': {'id': 0},
             }))
+
+        return True
 
     def init(self, req):
         content = [req.client.subs[x] for x in req.client.room.subs_order]
@@ -116,6 +120,7 @@ class LineHandler(BaseHandler):
         msg['id'] = line['id']
 
         req.reply_and_send_to_partners(msg)
+        return True
 
     @get_selected_line
     def changeStyle(self, req, line):
@@ -131,6 +136,7 @@ class LineHandler(BaseHandler):
         msg['id'] = line['id']
 
         req.reply_and_send_to_partners(msg)
+        return True
 
     @get_selected_line
     def toggleComment(self, req, line):
@@ -141,4 +147,5 @@ class LineHandler(BaseHandler):
         msg['comment'] = line['comment']
 
         req.reply_and_send_to_partners(msg)
+        return True
 

@@ -86,15 +86,17 @@ class Room(object):
         self.next_id = max(self.subs_order)
 
     def save(self):
-        if not changed:
+        if not self.changed:
             return
+
+        app_log.debug("Room %s changed, saving changes" % self.name)
 
         with open(self.subs_path, 'w') as f:
             f.write(json.dumps({'styles': self.styles}))
             f.write('\n')
             f.write(json.dumps({'lines': [self.subs[x] for x in self.subs_order]}))
 
-        changed = False
+        self.changed = False
 
     def create_style(self, name, content={}):
     # Styles: dict(name -> style)

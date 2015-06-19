@@ -33,6 +33,7 @@ class StyleHandler(BaseHandler):
         req.content['style'] = style
 
         req.send_to_all(style)
+        return True
 
     @get_style_or_error
     def update(self, req, style):
@@ -44,6 +45,7 @@ class StyleHandler(BaseHandler):
         req.content['style'] = style
 
         req.reply_and_send_to_partners(req.content)
+        return True
 
     @get_style_or_error
     def rename(self, req, style):
@@ -55,6 +57,7 @@ class StyleHandler(BaseHandler):
         req.content['style'] = style
 
         req.reply_and_send_to_partners(req.content)
+        return True
 
     @get_style_or_error
     def delete(self, req):
@@ -68,6 +71,7 @@ class StyleHandler(BaseHandler):
                 'action': 'add',
                 'content': {'name': 'Default'}
             }))
+        return True
 
     def init(self, req):
         if not req.client.styles:

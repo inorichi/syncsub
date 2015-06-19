@@ -100,6 +100,8 @@ class ImportHandler(BaseHandler):
             'styles': req.client.styles
         })
 
+        return True
+
 
     def srt(self, req):
         raise NotImplemented
