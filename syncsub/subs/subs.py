@@ -8,10 +8,10 @@ from tornado.log import gen_log
 from .message_handler import MessageHandler 
 from .client import Client
 from .room import Room, RoomManager
-from settings import *
 
 
 message_handler = MessageHandler()
+room_manager = RoomManager.instance()
 
 
 class SubsWebSocketHandler(WebSocketHandler):
@@ -25,7 +25,7 @@ class SubsWebSocketHandler(WebSocketHandler):
             return
 
         # Create a new room if it doesn't exist
-        room = RoomManager.get_or_create(room_name)
+        room = room_manager.get_or_create(room_name)
         print(room.subs)
 
         # Create a client associating his room

@@ -14,9 +14,9 @@ from tornado.options import options, parse_command_line
 from tornado.log import app_log
 
 
-from settings import settings
+from settings import settings, save_time
 from wsgi import application as django_app
-from syncsub.subs.subs import SubsWebSocketHandler
+from syncsub.subs.subs import SubsWebSocketHandler, room_manager
 
 
 def main():
@@ -35,11 +35,16 @@ def main():
 
     http_server = tornado.httpserver.HTTPServer(application, xheaders=True)
     http_server.listen(options.port)
-    ioloop = tornado.ioloop.IOLoop.instance()
+    main_loop = tornado.ioloop.IOLoop.instance()
     if options.debug:
-        tornado.autoreload.start(ioloop)
-        
-    ioloop.start()
+        tornado.autoreload.start(main_loop)
+
+    interval_ms = save_time * 60 * 1000 # in milliseconds
+    main_loop = tornado.ioloop.IOLoop.instance()
+    scheduler = tornado.ioloop.PeriodicCallback(room_manager.save, interval_ms, io_loop=main_loop)
+    scheduler.start()
+    main_loop.start()
+
 
 if __name__ == "__main__":
     parse_command_line()

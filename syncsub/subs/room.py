@@ -2,6 +2,13 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+from os.path import join
+import json
+
+from tornado.log import app_log
+
+from settings import subtitles_dir
+
 class Room(object):
     def __init__(self, name):
         self.name = name
@@ -10,6 +17,7 @@ class Room(object):
         self.styles = []
         self.clients = set()
         self.next_id = max(self.subs.keys()) if self.subs else 0
+        self.subs_path = join(subtitles_dir, self.name + '.txt')
 
         if not self.subs:
             self.add_line(self.create_line())
@@ -57,7 +65,32 @@ class Room(object):
         # Update and override if necessary
         line.update(content)
         return line
-        
+
+    def load(self):
+        with open(self.subs_path, 'r') as f:
+            styles, subs = f.readlines()
+
+        styles = json.loads(styles)['styles']
+        subs = json.loads(subs)['lines']
+
+        self.styles = styles
+
+        self.subs.clear()
+        self.subs_order.clear()
+
+        for i in range(len(subs)):
+            self.subs_order.append(subs[i]['id'])
+            self.subs[self.subs_order[i]] = subs[i]
+
+        self.next_id = max(self.subs_order)
+
+
+    def save(self):
+        with open(self.subs_path, 'w') as f:
+            f.write(json.dumps({'styles': self.styles}))
+            f.write('\n')
+            f.write(json.dumps({'lines': [self.subs[x] for x in self.subs_order]}))
+
     def create_style(self, name, content={}):
     # Styles: dict(name -> style)
     # Style attributes:
@@ -121,29 +154,44 @@ class Room(object):
 class RoomManager(object):
     rooms = {}
 
-    @classmethod
-    def get(cls, name):
-        return cls.rooms.get(name)
+    @staticmethod
+    def instance():
+        if not hasattr(RoomManager, "_instance"):
+            RoomManager._instance = RoomManager()
+        return RoomManager._instance
 
-    @classmethod
-    def create(cls, name):
-        if cls.get(name) is None:
+    def get(self, name):
+        return self.rooms.get(name)
+
+    def create(self, name):
+        if self.get(name) is None:
             room = Room(name)
-            cls.rooms[name] = room
+            self.rooms[name] = room
+            try:
+                room.load()
+            except IOError:
+                pass
+
             return room
 
         return None
 
-    @classmethod
-    def get_or_create(cls, name):
-        room = cls.get(name)
+    def get_or_create(self, name):
+        room = self.get(name)
         if room is None:
-            return cls.create(name)
+            return self.create(name)
 
         return room
 
-    @classmethod
-    def delete(cls, name):
-        del cls.rooms[name]
+    def delete(self, name):
+        del self.rooms[name]
+
+    def all(self):
+        return list(self.rooms.values())
+
+    def save(self):
+        app_log.debug("Saving all files")
+        for room in self.all():
+            room.save()
 
 
