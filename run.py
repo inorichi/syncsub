@@ -11,7 +11,7 @@ import tornado.autoreload
 import tornado.web
 import tornado.wsgi
 from tornado.options import options, parse_command_line
-from tornado.log import app_log
+from tornado.log import app_log, gen_log
 
 from settings import settings, save_time
 from wsgi import application as django_app

@@ -5,7 +5,7 @@
 from tornado.websocket import WebSocketHandler
 from tornado.log import gen_log
 
-from .message_handler import MessageHandler 
+from .messages import MessageHandler 
 from .client import Client
 from .room import Room, RoomManager
 
@@ -26,7 +26,6 @@ class SubsWebSocketHandler(WebSocketHandler):
 
         # Create a new room if it doesn't exist
         room = room_manager.get_or_create(room_name)
-        print(room.subs)
 
         # Create a client associating his room
         self.client = Client(self, room)
