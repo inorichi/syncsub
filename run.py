@@ -54,7 +54,6 @@ def main():
         tornado.autoreload.start(main_loop)
 
     subtitles_interval_ms = SUBTITLES_SAVE_INTERVAL * 1000 # in milliseconds
-    main_loop = tornado.ioloop.IOLoop.instance()
     scheduler = tornado.ioloop.PeriodicCallback(room_manager.save, subtitles_interval_ms, io_loop=main_loop)
     scheduler.start()
     main_loop.start()

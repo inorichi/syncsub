@@ -33,7 +33,6 @@ TORNADO_SETTINGS = {
 }
 
 # Django settings module to load
-
 def get_django_settings(debug):
     return "syncsub.settings.dev" if debug else "syncsub.settings.production"
 
