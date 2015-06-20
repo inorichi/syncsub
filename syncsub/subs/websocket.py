@@ -3,6 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from tornado.websocket import WebSocketHandler
+from tornado.ioloop import PeriodicCallback
 from tornado.log import app_log
 
 from .messages import MessageHandler 
@@ -39,3 +40,7 @@ class SubsWebSocketHandler(WebSocketHandler):
     def check_origin(self, origin):
         return True
 
+
+class SubsSavePeriodicCallback(PeriodicCallback):
+    def __init__(self, interval):
+        super(SubsSavePeriodicCallback, self).__init__(room_manager.save, interval * 1000)

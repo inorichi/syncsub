@@ -13,7 +13,7 @@ import tornado.wsgi
 from tornado.options import define, options, parse_command_line
 from tornado.log import app_log, gen_log
 
-from syncsub.subs.websocket import SubsWebSocketHandler, room_manager
+from syncsub.subs.websocket import SubsWebSocketHandler, SubsSavePeriodicCallback
 
 from settings import *
 
@@ -53,9 +53,8 @@ def main():
         app_log.setLevel(logging.DEBUG)
         tornado.autoreload.start(main_loop)
 
-    subtitles_interval_ms = SUBTITLES_SAVE_INTERVAL * 1000 # in milliseconds
-    scheduler = tornado.ioloop.PeriodicCallback(room_manager.save, subtitles_interval_ms, io_loop=main_loop)
-    scheduler.start()
+    subtitles_save_scheduler = SubsSavePeriodicCallback(SUBTITLES_SAVE_INTERVAL)
+    subtitles_save_scheduler.start()
     main_loop.start()
 
 
