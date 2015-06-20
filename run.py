@@ -17,9 +17,6 @@ from syncsub.subs.websocket import SubsWebSocketHandler, room_manager
 
 from settings import *
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", DJANGO_SETTINGS_MODULE)
-from syncsub.wsgi import application as django_app
-
 
 def define_arguments():
     define("port", default=PORT, help="run on the given port", type=int)
@@ -27,8 +24,15 @@ def define_arguments():
 
 
 def main():
+    # Parse command line arguments
     define_arguments()
     parse_command_line()
+
+    # Set django settings module and get the wsgi app
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", get_django_settings(options.debug))
+    from syncsub.wsgi import application as django_app
+
+    # Apply settings after django is configured
     set_from_django_settings()
 
     handlers = [

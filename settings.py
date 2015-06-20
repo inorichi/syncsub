@@ -1,9 +1,3 @@
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-import os
-
 # Whether to run in debug mode
 DEBUG = True
 
@@ -23,7 +17,8 @@ SUBTITLES_DIRNAME = 'data'
 SUBTITLES_SAVE_INTERVAL = 300
 
 
-##### You shouldn't need to modify anything from here #####
+######## You shouldn't need to modify anything from here ########
+import os
 
 # Absolute filesystem path to the project
 APP_ROOT = os.path.dirname(__file__)
@@ -38,7 +33,9 @@ TORNADO_SETTINGS = {
 }
 
 # Django settings module to load
-DJANGO_SETTINGS_MODULE = "syncsub.settings.dev" if DEBUG else "syncsub.settings.production"
+
+def get_django_settings(debug):
+    return "syncsub.settings.dev" if debug else "syncsub.settings.production"
 
 def set_from_django_settings():
     from django.conf import settings
