@@ -13,8 +13,6 @@ import tornado.wsgi
 from tornado.options import define, options, parse_command_line
 from tornado.log import app_log, gen_log
 
-from syncsub.subs.websocket import SubsWebSocketHandler, SubsSavePeriodicCallback
-
 from settings import *
 
 
@@ -30,7 +28,10 @@ def main():
 
     # Set django settings module and get the wsgi app
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", get_django_settings(options.debug))
+
+    # Only load syncsub after django is initialized
     from syncsub.wsgi import application as django_app
+    from syncsub.subs.websocket import SubsWebSocketHandler, SubsSavePeriodicCallback
 
     # Apply settings after django is configured
     set_from_django_settings()

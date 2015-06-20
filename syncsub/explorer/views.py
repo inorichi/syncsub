@@ -5,6 +5,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.http import HttpResponseForbidden
+from django.contrib.auth.decorators import login_required
 
 from rest_framework import viewsets
 from guardian.shortcuts import get_objects_for_user
@@ -48,17 +49,15 @@ class FileView(TemplateView):
         return context
 
 
+@login_required
 def item_view(request, slug):
     item = Item.objects.get_subclass(path=slug)
-    if isinstance(item, Folder):
-        if not item.is_visible(request.user):
-            return HttpResponseForbidden()
+    if not item.is_visible(request.user):
+        return HttpResponseForbidden()
 
+    if isinstance(item, Folder):
         return FolderView.as_view(item=item)(request)
     else:
-        if not item.is_visible(request.user):
-            return HttpResponseForbidden()
-
         return FileView.as_view(item=item)(request)
 
 

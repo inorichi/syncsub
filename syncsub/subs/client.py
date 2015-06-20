@@ -14,6 +14,7 @@ class Client(object):
         self.req_handler = req_handler
         room.add_client(self)
         self.room = room
+        self.user = req_handler._user
         self.subs = room.subs
         self.styles = room.styles
         self.locked_line = None
