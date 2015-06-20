@@ -13,12 +13,15 @@ from django.conf import settings as django_settings
 from .messages import MessageHandler 
 from .client import Client
 from .room import Room, RoomManager
-from .exceptions import InvalidRoom, PermissionDenied
 from explorer.models import Item
 
 
 message_handler = MessageHandler()
 room_manager = RoomManager.instance()
+
+
+class PermissionDenied(Exception):
+    pass
 
 
 class SubsWebSocketHandler(WebSocketHandler):
