@@ -10,16 +10,26 @@ import tornado.ioloop
 import tornado.autoreload
 import tornado.web
 import tornado.wsgi
-from tornado.options import options, parse_command_line
+from tornado.options import define, options, parse_command_line
 from tornado.log import app_log, gen_log
 
-from settings import settings, save_time
-from wsgi import application as django_app
 from syncsub.subs.websocket import SubsWebSocketHandler, room_manager
+
+from settings import *
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", DJANGO_SETTINGS_MODULE)
+from syncsub.wsgi import application as django_app
+
+
+def define_arguments():
+    define("port", default=PORT, help="run on the given port", type=int)
+    define("debug", default=DEBUG, help="debug mode")
 
 
 def main():
+    define_arguments()
     parse_command_line()
+    set_from_django_settings()
 
     handlers = [
         (r'/ws', SubsWebSocketHandler),
@@ -28,21 +38,20 @@ def main():
         }),
     ]
 
-    if options.debug:
-        app_log.setLevel(logging.DEBUG)
-        settings["static_path"] = os.path.join(os.path.dirname(__file__), 'syncsub', 'static')
-
-    application = tornado.web.Application(handlers, **settings)
+    application = tornado.web.Application(handlers, **TORNADO_SETTINGS)
 
     http_server = tornado.httpserver.HTTPServer(application, xheaders=True)
     http_server.listen(options.port)
+
     main_loop = tornado.ioloop.IOLoop.instance()
+
     if options.debug:
+        app_log.setLevel(logging.DEBUG)
         tornado.autoreload.start(main_loop)
 
-    interval_ms = save_time * 60 * 1000 # in milliseconds
+    subtitles_interval_ms = SUBTITLES_SAVE_INTERVAL * 1000 # in milliseconds
     main_loop = tornado.ioloop.IOLoop.instance()
-    scheduler = tornado.ioloop.PeriodicCallback(room_manager.save, interval_ms, io_loop=main_loop)
+    scheduler = tornado.ioloop.PeriodicCallback(room_manager.save, subtitles_interval_ms, io_loop=main_loop)
     scheduler.start()
     main_loop.start()
 

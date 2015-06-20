@@ -163,7 +163,7 @@ STATICFILES_DIRS = (
     join(DJANGO_ROOT, 'static'),
 )
 
-STATIC_ROOT = normpath(join(DJANGO_ROOT, 'assets'))
+STATIC_ROOT = normpath(join(DJANGO_ROOT, 'static'))
 
 ANONYMOUS_USER_ID = -1
 

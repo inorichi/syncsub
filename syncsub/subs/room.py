@@ -8,7 +8,7 @@ import json
 from tornado.log import app_log
 
 from .utils import create_line, create_style
-from settings import subtitles_dir
+from settings import SUBTITLES_DIR
 
 class Room(object):
     def __init__(self, name):
@@ -18,7 +18,7 @@ class Room(object):
         self.styles = []
         self.clients = set()
         self.next_id = max(self.subs.keys()) if self.subs else 0
-        self.subs_path = join(subtitles_dir, self.name + '.txt')
+        self.subs_path = join(SUBTITLES_DIR, self.name + '.txt')
         self.modified = False
 
         if not self.subs:
@@ -126,5 +126,4 @@ class RoomManager(object):
         app_log.debug("Saving all files")
         for room in self.all():
             room.save()
-
 

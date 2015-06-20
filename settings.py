@@ -4,20 +4,44 @@
 
 import os
 
-from tornado.options import define, options
+# Whether to run in debug mode
+DEBUG = True
 
-define("port", default=8000, help="run on the given port", type=int)
-define("debug", default=True, help="debug mode")
+# Port to use
+PORT = 8000
 
-root = os.path.dirname(__file__)
-subtitles_dir = os.path.join(root, 'data')
-save_time = 5 # in minutes
+# Whether to use XSRF cookies
+XSRF_COOKIES = False
 
-settings = {}
+# Secret cookie
+SECRET_KEY = "secret!"
 
-settings["static_path"] = os.path.join(root, 'syncsub', 'assets')
-settings["template_path"] = os.path.join(root, 'syncsub', 'templates')
-settings["cookie_secret"] = "secret!"
-settings["login_url"] = "/login"
-settings["xsrf_cookies"] = False
+# Folder name to store app's subtitles (it must exist)
+SUBTITLES_DIRNAME = 'data'
 
+# Time in seconds to save subtitles' state (5 minutes by default)
+SUBTITLES_SAVE_INTERVAL = 300
+
+
+##### You shouldn't need to modify anything from here #####
+
+# Absolute filesystem path to the project
+APP_ROOT = os.path.dirname(__file__)
+
+# Absolute filesystem path to where subtitles are stored
+SUBTITLES_DIR = os.path.join(APP_ROOT, SUBTITLES_DIRNAME)
+
+# Tornado settings
+TORNADO_SETTINGS = {
+    "xsrf_cookies": XSRF_COOKIES,
+    "cookie_secret": SECRET_KEY
+}
+
+# Django settings module to load
+DJANGO_SETTINGS_MODULE = "syncsub.settings.dev" if DEBUG else "syncsub.settings.production"
+
+def set_from_django_settings():
+    from django.conf import settings
+
+    TORNADO_SETTINGS["login_url"] = settings.LOGIN_URL
+    TORNADO_SETTINGS["static_path"] = settings.STATIC_ROOT
