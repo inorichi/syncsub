@@ -6,6 +6,10 @@ fixtures
 assets
 *.sw[op]
 *.py[oc]
+build/
+node_modules/
+bower_components
+coverage/
 
 *.mkv
 *.mp4
