@@ -26,40 +26,6 @@ class BaseHandler(object):
             gen_log.warning('Message for non existing method from client %s: %s'
                     % (client.remote_address, msg))
 
-    def reply(self, client, msg):
-        client.send({
-            'callId': msg['callId'],
-            'service': self.name,
-            'action': msg['action']
-        })
-
-    def send_to_partners(self, client, msg):
-        if 'callId' in msg:
-            msg.pop('callId')
-
-        for partner in client.room.clients:
-            if partner is not client:
-                partner.send(msg)
-
-    def reply_and_send_to_partners(self, client, msg):
-        self.reply(client, msg)
-        self.send_to_partners(client, msg)
-
-    def send_to_all(self, client, msg):
-        if 'callId' in msg:
-            msg.pop('callId')
-
-        for a_client in client.room.clients:
-            a_client.send(msg)
-
-    def reply_error(self, client, msg, error=''):
-        client.send({
-            'callId': msg['callId'],
-            'service': self.name,
-            'action': msg['action'],
-            'error': error
-        })
-
 
 class Request(object):
     __slots__ = ('client', 'service', 'action', 'content', 'call_id')
