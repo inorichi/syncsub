@@ -87,7 +87,6 @@ class LineHandler(BaseHandler):
 
     @get_line_by_id
     def lock(self, req, line):
-        line['locked'] = 1
         req.client.locked_line = line
         req.reply()
 
