@@ -1,1 +1,1 @@
-../../../../wsub/build/subs.js
+../../../wsub/build/subs.js

@@ -10,7 +10,7 @@ from ..utils import create_line
 
 def get_selected_line(func):
     def wrapper(handler, req, line=None):
-        if req.client.locked_line:
+        if req.client.locked_line and req.client.locked_line['id'] in req.client.room.subs:
             line = req.client.locked_line
             return func(handler, req, line)
 
@@ -67,10 +67,6 @@ class LineHandler(BaseHandler):
 
     @get_line_by_id
     def delete(self, req, line):
-        if 'locked' in line and line['locked'] == 1 and req.client.locked_line != line:
-            req.reply_error("You can't delete lines edited by other")
-            return
-
         req.client.room.del_line(line)
         req.reply_and_send_to_partners(req.content)
 
@@ -91,26 +87,9 @@ class LineHandler(BaseHandler):
 
     @get_line_by_id
     def lock(self, req, line):
-        # TODO Allow to edit the same line?
-        if 'locked' not in line or line['locked'] == 0:
-            if req.client.locked_line:
-                msg_unlock = {'action': 'unlock', 'id': req.client.locked_line['id']}
-                self.unlock(Request(req.client, {
-                    'service': self.name,
-                    'action': 'unlock',
-                    'content': {'id': req.client.locked_line['id']}
-                }))
-
-            line['locked'] = 1
-            req.client.locked_line = line
-            req.reply()
-
-    @get_selected_line
-    def unlock(self, req, line):
-        if line['locked'] == 1:
-            line['locked'] = 0
-            req.client.locked_line = None
-            # client.send(msg)
+        line['locked'] = 1
+        req.client.locked_line = line
+        req.reply()
 
     @get_selected_line
     def updateTime(self, req, line):
