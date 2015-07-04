@@ -170,3 +170,5 @@ ANONYMOUS_USER_ID = -1
 AUTH_USER_MODEL = 'users.User'
 
 SHELL_PLUS = "ipython"
+
+LOGIN_URL = '/login'
