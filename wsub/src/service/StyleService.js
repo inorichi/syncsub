@@ -4,18 +4,10 @@
 
 var capitalize = require('../utils/capitalize');
 
-module.exports = function($rootScope, WebSocketService, DataService, VideoService) {
-    var service = {};
+module.exports = function($rootScope, WebSocketService, BaseService, DataService, VideoService) {
+    var service = Object.create(BaseService);
     service.name = 'style';
     service.styles = DataService.styles;
-
-    service.sendToWs = function(action, content) {
-        return WebSocketService.send(service.name, action, content);
-    } 
-
-    service.putToWs = function(action, content) {
-        WebSocketService.put(service.name, action, content);
-    }
 
     $rootScope.$on('connected', function() {
         service.requestInit();

@@ -19,4 +19,11 @@ describe("Basic angular tests", function() {
     expect(DataService).toBeDefined();
   }));
 
+  it("should have right names", inject(function(LineService, StyleService) {
+    expect(LineService.name).toBe('line');
+    expect(StyleService.name).toBe('style');
+  }));
+
+
+
 });

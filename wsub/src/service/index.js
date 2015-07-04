@@ -8,6 +8,7 @@ debug = true;
 
 
 app.factory('WebSocketService', require('./WebSocketService'));
+app.factory('BaseService', require('./BaseService.js'));
 app.factory('DataService', require('./DataService'));
 app.factory('LineService', require('./LineService'));
 app.factory('StyleService', require('./StyleService'));
