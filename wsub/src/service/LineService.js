@@ -100,6 +100,15 @@ module.exports = function($rootScope, WebSocketService, BaseService, DataService
 
     service.receivedInit = function(content) {
         Array.prototype.push.apply(service.lines, content);
+        if ( ! $.fn.DataTable.isDataTable( '#table_lines' ) ) {
+                $('#table_lines').DataTable({
+                paging: false,
+                info: false,
+                searching: false,
+                ordering: false,
+                scrollY: '300px',
+            });
+        }
     }
 
     service.receivedUpdate = function(content) {
