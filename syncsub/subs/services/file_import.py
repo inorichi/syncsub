@@ -141,7 +141,7 @@ class ImportHandler(BaseHandler):
 
         for line in lines:
             if line:
-                line_id = req.client.room.get_next_id()
+                line_id = req.client.room.get_next_id
                 lines_dict[line_id] = self._parse_line(pattern, line, line_id)
 
         return lines_dict
